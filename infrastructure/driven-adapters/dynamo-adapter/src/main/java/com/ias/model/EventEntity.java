@@ -1,6 +1,5 @@
 package com.ias.model;
 
-import com.ias.user.User;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

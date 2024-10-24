@@ -17,16 +17,17 @@ public class EventGatewayImpl implements EventRepository {
 
     private final Gson mapper;
 
+
+
+    @Override
+    public Mono<Event> getById(String id) {
+        return dynamoReactiveEventAdapter.findById(id)
+                .map(eventEntity -> mapper.fromJson(mapper.toJson(eventEntity), Event.class));
+    }
     @Override
     public Flux<Event> getAll() {
         return Flux.empty();
     }
-
-    @Override
-    public Mono<Event> getById(String id) {
-        return Mono.empty();
-    }
-
     @Override
     public Flux<Event> getAllByUserId(String id) {
         return Flux.empty();

@@ -4,6 +4,7 @@ import com.ias.request.EventRequest;
 import com.ias.request.UserRequest;
 import com.ias.response.EventResponse;
 import com.ias.response.StatusEventResponse;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import lombok.experimental.UtilityClass;
 import org.springdoc.core.fn.builders.operation.Builder;
 import org.springframework.http.HttpStatus;
@@ -51,8 +52,9 @@ public class OpenApiDoc {
         return builder.operationId("getEventById")
                 .description("Get details of a specific event by its ID")
                 .parameter(parameterBuilder()
-                        .name("{id}")
+                        .name("id")
                         .description("The Id of the event to retrieve")
+                        .in(ParameterIn.PATH)
                         .required(true)
                         .example("c27e4187-18cf-425a-abcc-2b0f3447d570")
                 )
@@ -83,9 +85,10 @@ public class OpenApiDoc {
         return builder.operationId("createOrUpdateEvent")
                 .description("Create a new event or update an existing one")
                 .parameter(parameterBuilder()
-                        .name("{id}")
+                        .name("id")
                         .description("The id of the event to be updated, if this is empty it will be created")
                         .required(false)
+                        .in(ParameterIn.PATH)
                         .example("c27e4187-18cf-425a-abcc-2b0f3447d570")
                 )
                 .requestBody(
@@ -114,8 +117,9 @@ public class OpenApiDoc {
         return builder.operationId("deleteEvent")
                 .description("Delete an event by its ID")
                 .parameter(parameterBuilder()
-                        .name("{id}")
+                        .name("id")
                         .description("The id of the event to be deleted")
+                        .in(ParameterIn.PATH)
                         .required(true)
                         .example("c27e4187-18cf-425a-abcc-2b0f3447d570")
                 )
@@ -136,8 +140,9 @@ public class OpenApiDoc {
         return builder.operationId("registerUserToEvent")
                 .description("Register a user for a specific event")
                 .parameter(parameterBuilder()
-                        .name("{id}")
+                        .name("id")
                         .description("Id of the event that the user wants to register")
+                        .in(ParameterIn.PATH)
                         .required(true)
                         .example("c27e4187-18cf-425a-abcc-2b0f3447d570")
                 )
@@ -166,8 +171,9 @@ public class OpenApiDoc {
         return builder.operationId("getEventsByUserId")
                 .description("Retrieve a list of events for which the user is registered")
                 .parameter(parameterBuilder()
-                        .name("{userId}")
+                        .name("userId")
                         .description("Id of the user who requires their events")
+                        .in(ParameterIn.PATH)
                         .required(true)
                         .example("c27e4187-18cf-425a-abcc-2b0f3447d570")
                 )
