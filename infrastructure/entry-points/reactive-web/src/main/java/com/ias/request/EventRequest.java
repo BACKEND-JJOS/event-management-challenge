@@ -8,6 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class EventRequest {
+    private String id;
     private String name;
     private String date;
     private String location;

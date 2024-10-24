@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.ias.DynamoReactiveEventAdapter;
 import com.ias.event.Event;
 import com.ias.event.gateway.EventRepository;
+import com.ias.model.EventEntity;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
@@ -26,7 +27,8 @@ public class EventGatewayImpl implements EventRepository {
     }
     @Override
     public Flux<Event> getAll() {
-        return Flux.empty();
+        return dynamoReactiveEventAdapter.findAll()
+                .map(eventEntity ->  mapper.fromJson(mapper.toJson(eventEntity), Event.class));
     }
     @Override
     public Flux<Event> getAllByUserId(String id) {
@@ -35,12 +37,14 @@ public class EventGatewayImpl implements EventRepository {
 
     @Override
     public Mono<Event> save(Event event) {
-        return Mono.empty();
+        return dynamoReactiveEventAdapter.save(mapper.fromJson(mapper.toJson(event), EventEntity.class))
+                .map(eventEntity-> mapper.fromJson(mapper.toJson(eventEntity), Event.class));
     }
 
     @Override
     public Mono<Event> update(Event event) {
-        return Mono.empty();
+        return dynamoReactiveEventAdapter.save(mapper.fromJson(mapper.toJson(event), EventEntity.class))
+                .map(eventEntity-> mapper.fromJson(mapper.toJson(eventEntity), Event.class));
     }
 
     @Override

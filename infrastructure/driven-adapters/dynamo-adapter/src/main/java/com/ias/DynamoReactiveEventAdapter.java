@@ -3,11 +3,14 @@ package com.ias;
 import com.ias.model.EventEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbAsyncTable;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedAsyncClient;
 import software.amazon.awssdk.enhanced.dynamodb.Key;
 import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
+
+import java.util.Optional;
 
 
 @Repository
@@ -29,5 +32,15 @@ public class DynamoReactiveEventAdapter {
 
     private Key getKey(String id) {
         return Key.builder().partitionValue(id).build();
+    }
+
+    public Flux<EventEntity> findAll() {
+        return Flux.from(eventEntityDynamoDbAsyncTable.scan().items());
+    }
+
+    public Mono<EventEntity> save(EventEntity eventEntity) {
+        return Mono.fromFuture(
+                () -> eventEntityDynamoDbAsyncTable.putItem(eventEntity)
+        ).thenReturn(eventEntity);
     }
 }

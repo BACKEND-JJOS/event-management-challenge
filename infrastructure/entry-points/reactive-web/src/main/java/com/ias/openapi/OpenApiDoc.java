@@ -84,13 +84,6 @@ public class OpenApiDoc {
     public Builder createOrUpdateEvent(Builder builder) {
         return builder.operationId("createOrUpdateEvent")
                 .description("Create a new event or update an existing one")
-                .parameter(parameterBuilder()
-                        .name("id")
-                        .description("The id of the event to be updated, if this is empty it will be created")
-                        .required(false)
-                        .in(ParameterIn.PATH)
-                        .example("c27e4187-18cf-425a-abcc-2b0f3447d570")
-                )
                 .requestBody(
                         requestBodyBuilder()
                                 .required(true)
