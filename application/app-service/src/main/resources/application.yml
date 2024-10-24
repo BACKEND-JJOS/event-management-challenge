@@ -1,0 +1,28 @@
+server:
+  port: 8081
+springdoc:
+  swagger-ui:
+    path: "/doc/swagger-ui/index.html"
+  api-docs:
+    path: "/doc/api-docs"
+spring:
+  webflux:
+    base-path: "/iasapi"
+  application:
+    name: event-management-challenge
+  profiles:
+    active: dev
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    virtual-host: /
+logging:
+  level:
+    com.ias: DEBUG
+    org.slf4j: DEBUG
+aws:
+  dynamodb:
+    endpoint: "http://localhost:8010"
+  region: "us-east-1"
