@@ -7,8 +7,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class EventRequest {
-    private String name;
-    private String date;
-    private String location;
+public class UserRequest {
+    private String userId;
 }
