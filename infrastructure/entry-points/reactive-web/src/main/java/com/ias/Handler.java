@@ -14,8 +14,6 @@ import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
-import java.util.UUID;
-
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -25,6 +23,7 @@ public class Handler {
     private final CreateOrUpdateEventUseCase createOrUpdateEventUseCase;
     private final RegisterUserToEventUseCase registerUserToEventUseCase;
     private final GetEventsByUserIdUseCase getEventsByUserIdUseCase;
+    private final DeleteEventByIdUseCase deleteEventByIdUseCase;
     private final Gson mapper;
 
     public Mono<ServerResponse> listenGETEvents(ServerRequest serverRequest) {
@@ -53,8 +52,8 @@ public class Handler {
     }
 
     public Mono<ServerResponse> listenDELETEEvent(ServerRequest serverRequest) {
-        String traceUUID = UUID.randomUUID().toString();
-        return ServerResponse.ok().bodyValue(traceUUID);
+        return deleteEventByIdUseCase.execute(serverRequest.pathVariable("id"))
+                .then(ServerResponse.ok().bodyValue(new StatusEventResponse("The event was deleted")));
     }
 
     public Mono<ServerResponse> listenPUTRegisterUserToEvent(ServerRequest serverRequest) {

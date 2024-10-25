@@ -1,6 +1,5 @@
 package com.ias;
 
-import com.ias.event.Event;
 import com.ias.model.EventEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -10,8 +9,6 @@ import software.amazon.awssdk.enhanced.dynamodb.DynamoDbAsyncTable;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedAsyncClient;
 import software.amazon.awssdk.enhanced.dynamodb.Key;
 import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
-
-import java.util.Optional;
 
 
 @Repository
@@ -27,8 +24,8 @@ public class DynamoReactiveEventAdapter {
 
     public Mono<EventEntity> findById(String id) {
         return Mono.fromFuture(
-                () ->  eventEntityDynamoDbAsyncTable.getItem(getKey(id))
-        ).doOnError(e ->  log.error("Error when searching for the event by ID : {0}  - TRACE : {1}", id, "UUID"));
+                () -> eventEntityDynamoDbAsyncTable.getItem(getKey(id))
+        ).doOnError(e -> log.error("Error when searching for the event by ID : {0}  - TRACE : {1}", id, "UUID"));
     }
 
     private Key getKey(String id) {
@@ -43,6 +40,13 @@ public class DynamoReactiveEventAdapter {
         return Mono.fromFuture(
                 () -> eventEntityDynamoDbAsyncTable.putItem(eventEntity)
         ).thenReturn(eventEntity);
+    }
+
+    public Mono<Void> deleteById(String id) {
+        return Mono.fromFuture(
+                        () -> eventEntityDynamoDbAsyncTable.deleteItem(getKey(id))
+                ).doOnError(e -> log.error("Error when deleting the event by ID : {0} - TRACE : {1}", id, "UUID"))
+                .then();
     }
 
 }

@@ -46,6 +46,6 @@ public class EventGatewayImpl implements EventRepository {
 
     @Override
     public Mono<Void> delete(String id) {
-        return Mono.empty();
+        return dynamoReactiveEventAdapter.deleteById(id);
     }
 }
