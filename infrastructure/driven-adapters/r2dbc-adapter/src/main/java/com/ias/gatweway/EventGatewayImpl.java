@@ -49,6 +49,7 @@ public class EventGatewayImpl implements EventRepository {
 
     @Override
     public Flux<Event> getEventsByUserId(Integer userId) {
-        return eventReactiveAdapter.findAllByUserId(userId);
+        return eventReactiveAdapter.findAllByUserId(userId)
+                .map(eventMapper::toDomain);
     }
 }

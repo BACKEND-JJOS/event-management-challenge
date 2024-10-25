@@ -72,7 +72,7 @@ public class Handler {
     }
 
     public Mono<ServerResponse> listenGETEventByUserId(ServerRequest serverRequest) {
-        return getEventsByUserIdUseCase.execute(serverRequest.pathVariable("userId"))
+        return getEventsByUserIdUseCase.execute(Integer.valueOf(serverRequest.pathVariable("userId")))
                 .map(event -> mapper.fromJson(mapper.toJson(event), EventRequest.class))
                 .collectList()
                 .flatMap(eventRequests ->
