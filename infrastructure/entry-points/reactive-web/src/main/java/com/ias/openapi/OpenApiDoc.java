@@ -56,7 +56,8 @@ public class OpenApiDoc {
                         .description("The Id of the event to retrieve")
                         .in(ParameterIn.PATH)
                         .required(true)
-                        .example("c27e4187-18cf-425a-abcc-2b0f3447d570")
+                        .example("9999")
+                        .schema(schemaBuilder().type("integer").format("int32"))
                 )
                 .response(
                         responseBuilder()
@@ -114,7 +115,8 @@ public class OpenApiDoc {
                         .description("The id of the event to be deleted")
                         .in(ParameterIn.PATH)
                         .required(true)
-                        .example("c27e4187-18cf-425a-abcc-2b0f3447d570")
+                        .example("9999")
+                        .schema(schemaBuilder().type("integer").format("int32"))
                 )
                 .response(
                         responseBuilder()
@@ -137,7 +139,8 @@ public class OpenApiDoc {
                         .description("Id of the event that the user wants to register")
                         .in(ParameterIn.PATH)
                         .required(true)
-                        .example("c27e4187-18cf-425a-abcc-2b0f3447d570")
+                        .example("9999")
+                        .schema(schemaBuilder().type("integer").format("int32"))
                 )
                 .requestBody(
                         requestBodyBuilder()
@@ -168,7 +171,8 @@ public class OpenApiDoc {
                         .description("Id of the user who requires their events")
                         .in(ParameterIn.PATH)
                         .required(true)
-                        .example("c27e4187-18cf-425a-abcc-2b0f3447d570")
+                        .example("9999")
+                        .schema(schemaBuilder().type("integer").format("int32"))
                 )
                 .response(
                         responseBuilder()

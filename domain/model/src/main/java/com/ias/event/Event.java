@@ -13,7 +13,7 @@ import java.util.List;
 @ToString
 public class Event {
 
-    private String id;
+    private Integer id;
     private String name;
     private String date;
     private String location;

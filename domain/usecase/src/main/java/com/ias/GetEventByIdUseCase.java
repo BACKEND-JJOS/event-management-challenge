@@ -12,7 +12,7 @@ public class GetEventByIdUseCase {
 
     private final EventRepository eventRepository;
 
-    public Mono<Event> get(String id){
+    public Mono<Event> get(Integer id){
         return  eventRepository.getById(id);
     }
 

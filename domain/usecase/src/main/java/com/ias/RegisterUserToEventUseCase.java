@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class RegisterUserToEventUseCase {
     private final EventRepository eventRepository;
 
-    public Mono<Void> register(User user, String eventId) {
+    public Mono<Void> register(User user, Integer eventId) {
         return eventRepository.getById(eventId)
                 .switchIfEmpty(Mono.error(new IllegalArgumentException("Event not found with ID: " + eventId)))
                 .flatMap(existingEvent ->

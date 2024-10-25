@@ -17,18 +17,7 @@ public class CreateOrUpdateEventUseCase {
     public Mono<Event> execute(Event event){
      return Mono.justOrEmpty(event.getId())
              .flatMap(e -> eventRepository.update(event))
-             .switchIfEmpty(
-                     generateUUID()
-                             .flatMap(uuid -> {
-                                 event.setId(uuid);
-                                 return eventRepository.save(event);
-                             })
-             );
+             .switchIfEmpty(eventRepository.save(event));
 
-    }
-
-    private Mono<String> generateUUID() {
-        return Mono.fromSupplier(UUID::randomUUID)
-                .map(UUID::toString);
     }
 }

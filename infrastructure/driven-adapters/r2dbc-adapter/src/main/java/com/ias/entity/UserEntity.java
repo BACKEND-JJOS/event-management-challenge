@@ -1,6 +1,7 @@
 package com.ias.entity;
 
 import lombok.*;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
 @Getter
@@ -11,5 +12,6 @@ import org.springframework.data.relational.core.mapping.Table;
 @ToString
 @Table("user")
 public class UserEntity {
-    private String id;
+    @Id
+    private Integer id;
 }

@@ -40,4 +40,16 @@ public class EventMapper {
                 .id(userEntity.getId())
                 .build();
     }
+
+    public EventEntity toEntity(Event event) {
+        if (event == null){
+            return null;
+        }
+        return EventEntity.builder()
+                .id(event.getId())
+                .name(event.getName())
+                .date(event.getDate())
+                .location(event.getLocation())
+                .build();
+    }
 }

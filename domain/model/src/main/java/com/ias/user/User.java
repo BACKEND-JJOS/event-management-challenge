@@ -9,5 +9,5 @@ import lombok.*;
 @Builder
 @ToString
 public class User {
-    private String id;
+    private Integer id;
 }

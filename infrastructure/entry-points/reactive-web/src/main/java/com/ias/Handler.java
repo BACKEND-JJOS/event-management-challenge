@@ -43,7 +43,7 @@ public class Handler {
 
     public Mono<ServerResponse> listenGETEventById(ServerRequest serverRequest) {
 
-        return getEventByIdUseCase.get(serverRequest.pathVariable("id")) //TODO: Agregar trace UUID y logs
+        return getEventByIdUseCase.get(Integer.valueOf(serverRequest.pathVariable("id"))) //TODO: Agregar trace UUID y logs
                 .flatMap(event -> ServerResponse.ok().bodyValue(event))
                 .switchIfEmpty(ServerResponse.status(HttpStatus.NOT_FOUND).bodyValue(new StatusEventResponse("The event not exist")));
     }
@@ -53,12 +53,12 @@ public class Handler {
                 .map(eventRequest -> mapper.fromJson(mapper.toJson(eventRequest), Event.class))
                 .flatMap(event ->
                         createOrUpdateEventUseCase.execute(event)
-                                .flatMap(eventHandler -> ServerResponse.created(null).bodyValue(eventHandler))
+                                .flatMap(eventHandler -> ServerResponse.created(null).bodyValue(mapperEvent.toEventResponse(eventHandler)))
                 );
     }
 
     public Mono<ServerResponse> listenDELETEEvent(ServerRequest serverRequest) {
-        return deleteEventByIdUseCase.execute(serverRequest.pathVariable("id"))
+        return deleteEventByIdUseCase.execute(Integer.valueOf(serverRequest.pathVariable("id")))
                 .then(ServerResponse.ok().bodyValue(new StatusEventResponse("The event was deleted")));
     }
 
@@ -66,7 +66,7 @@ public class Handler {
         return serverRequest.bodyToMono(UserRequest.class)
                 .map(mapperUser::toDomain)
                 .flatMap(user ->
-                        registerUserToEventUseCase.register(user, serverRequest.pathVariable("id"))
+                        registerUserToEventUseCase.register(user, Integer.valueOf(serverRequest.pathVariable("id")))
                                 .then(ServerResponse.ok().bodyValue(new StatusEventResponse("The user was registered to the event")))
                 );
     }

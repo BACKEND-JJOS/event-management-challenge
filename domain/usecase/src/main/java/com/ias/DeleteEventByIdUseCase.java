@@ -11,7 +11,7 @@ public class DeleteEventByIdUseCase {
 
     private final EventRepository eventRepository;
 
-    public Mono<Void> execute(String id){
+    public Mono<Void> execute(Integer id){
         return eventRepository.getById(id)
                 .switchIfEmpty(Mono.error(new IllegalArgumentException("Event not found with ID: " + id)))
                 .flatMap(event -> eventRepository.delete(event.getId()))

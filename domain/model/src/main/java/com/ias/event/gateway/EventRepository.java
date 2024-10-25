@@ -8,11 +8,11 @@ import reactor.core.publisher.Mono;
 public interface EventRepository {
     Flux<Event> getAll();
 
-    Mono<Event> getById(String id);
+    Mono<Event> getById(Integer id);
 
     Mono<Event> save(Event event);
 
     Mono<Event> update(Event event);
 
-    Mono<Void> delete(String id);
+    Mono<Void> delete(Integer id);
 }
