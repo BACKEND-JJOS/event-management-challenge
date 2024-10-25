@@ -1,5 +1,6 @@
 package com.ias;
 
+import com.ias.event.Event;
 import com.ias.model.EventEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -43,4 +44,5 @@ public class DynamoReactiveEventAdapter {
                 () -> eventEntityDynamoDbAsyncTable.putItem(eventEntity)
         ).thenReturn(eventEntity);
     }
+
 }

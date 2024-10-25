@@ -5,6 +5,7 @@ import com.ias.DynamoReactiveEventAdapter;
 import com.ias.event.Event;
 import com.ias.event.gateway.EventRepository;
 import com.ias.model.EventEntity;
+import com.ias.user.User;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
@@ -29,10 +30,6 @@ public class EventGatewayImpl implements EventRepository {
     public Flux<Event> getAll() {
         return dynamoReactiveEventAdapter.findAll()
                 .map(eventEntity ->  mapper.fromJson(mapper.toJson(eventEntity), Event.class));
-    }
-    @Override
-    public Flux<Event> getAllByUserId(String id) {
-        return Flux.empty();
     }
 
     @Override

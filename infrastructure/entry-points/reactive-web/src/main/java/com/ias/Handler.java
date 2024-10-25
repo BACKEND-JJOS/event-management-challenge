@@ -2,7 +2,9 @@ package com.ias;
 
 import com.google.gson.Gson;
 import com.ias.event.Event;
+import com.ias.mapper.MapperUser;
 import com.ias.request.EventRequest;
+import com.ias.request.UserRequest;
 import com.ias.response.StatusEventResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +23,8 @@ public class Handler {
     private final GetEventByIdUseCase getEventByIdUseCase;
     private final GetAllEventsUseCase getAllEventsUseCase;
     private final CreateOrUpdateEventUseCase createOrUpdateEventUseCase;
+    private final RegisterUserToEventUseCase registerUserToEventUseCase;
+    private final GetEventsByUserIdUseCase getEventsByUserIdUseCase;
     private final Gson mapper;
 
     public Mono<ServerResponse> listenGETEvents(ServerRequest serverRequest) {
@@ -34,7 +38,7 @@ public class Handler {
 
     public Mono<ServerResponse> listenGETEventById(ServerRequest serverRequest) {
 
-        return  getEventByIdUseCase.get(serverRequest.pathVariable("id")) //TODO: Agregar trace UUID y logs
+        return getEventByIdUseCase.get(serverRequest.pathVariable("id")) //TODO: Agregar trace UUID y logs
                 .flatMap(event -> ServerResponse.ok().bodyValue(event))
                 .switchIfEmpty(ServerResponse.status(HttpStatus.NOT_FOUND).bodyValue(new StatusEventResponse("The event not exist")));
     }
@@ -44,7 +48,7 @@ public class Handler {
                 .map(eventRequest -> mapper.fromJson(mapper.toJson(eventRequest), Event.class))
                 .flatMap(event ->
                         createOrUpdateEventUseCase.execute(event)
-                                .flatMap( eventHandler -> ServerResponse.created(null).bodyValue(eventHandler))
+                                .flatMap(eventHandler -> ServerResponse.created(null).bodyValue(eventHandler))
                 );
     }
 
@@ -53,13 +57,24 @@ public class Handler {
         return ServerResponse.ok().bodyValue(traceUUID);
     }
 
-    public Mono<ServerResponse> listenPOSTRegisterUserToEvent(ServerRequest serverRequest) {
-        String traceUUID = UUID.randomUUID().toString();
-        return ServerResponse.ok().bodyValue(traceUUID);
+    public Mono<ServerResponse> listenPUTRegisterUserToEvent(ServerRequest serverRequest) {
+        return serverRequest.bodyToMono(UserRequest.class)
+                .map(MapperUser::toDomain)
+                .flatMap(user ->
+                        registerUserToEventUseCase.register(user, serverRequest.pathVariable("id"))
+                                .then(ServerResponse.ok().bodyValue(new StatusEventResponse("The user was registered to the event")))
+                );
     }
 
     public Mono<ServerResponse> listenGETEventByUserId(ServerRequest serverRequest) {
-        String traceUUID = UUID.randomUUID().toString();
-        return ServerResponse.ok().bodyValue(traceUUID);
+        return getEventsByUserIdUseCase.execute(serverRequest.pathVariable("userId"))
+                .map(event -> mapper.fromJson(mapper.toJson(event), EventRequest.class))
+                .collectList()
+                .flatMap(eventRequests ->
+                        eventRequests.isEmpty()
+                                ? ServerResponse.status(HttpStatus.NOT_FOUND).bodyValue(new StatusEventResponse("The event not exist"))
+                                : ServerResponse.ok().bodyValue(eventRequests)
+                );
+
     }
 }

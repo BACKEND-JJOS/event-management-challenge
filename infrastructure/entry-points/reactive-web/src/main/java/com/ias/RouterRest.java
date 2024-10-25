@@ -20,7 +20,7 @@ public class RouterRest {
         return route()
                 .GET(EVENTS_ROUTE, handler::listenGETEvents, OpenApiDoc::getEvents)
                 .GET(EVENTS_ROUTE + "/user/{userId}", handler::listenGETEventByUserId, OpenApiDoc::getEventsByUserId)
-                .POST(EVENTS_ROUTE + ID_PATH_PARAM + "/register", handler::listenPOSTRegisterUserToEvent, OpenApiDoc::registerUserToEvent)
+                .PUT(EVENTS_ROUTE + ID_PATH_PARAM + "/register", handler::listenPUTRegisterUserToEvent, OpenApiDoc::registerUserToEvent)
                 .GET(EVENTS_ROUTE + ID_PATH_PARAM, handler::listenGETEventById, OpenApiDoc::getEventById)
                 .PUT(EVENTS_ROUTE , handler::listenPUTCreateOrUpdateEvent, OpenApiDoc::createOrUpdateEvent)
                 .DELETE(EVENTS_ROUTE + ID_PATH_PARAM, handler::listenDELETEEvent, OpenApiDoc::deleteEvent)
