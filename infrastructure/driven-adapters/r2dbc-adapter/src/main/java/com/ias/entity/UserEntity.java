@@ -1,7 +1,7 @@
-package com.ias.model;
+package com.ias.entity;
 
 import lombok.*;
-import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
+import org.springframework.data.relational.core.mapping.Table;
 
 @Getter
 @Setter
@@ -9,7 +9,7 @@ import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@DynamoDbBean
+@Table("user")
 public class UserEntity {
     private String id;
 }

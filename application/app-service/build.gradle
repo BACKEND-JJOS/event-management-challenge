@@ -5,5 +5,5 @@ dependencies {
     implementation project(':model')
     implementation project(':usecase')
     implementation project(':reactive-web')
-    implementation project(':dynamo-adapter')
+    implementation project(':r2dbc-adapter')
 }

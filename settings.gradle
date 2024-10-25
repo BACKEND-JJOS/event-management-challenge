@@ -12,6 +12,7 @@ project(':usecase').projectDir = file ('./domain/usecase')
 include ':reactive-web'
 project(':reactive-web').projectDir = file ('./infrastructure/entry-points/reactive-web')
 
-include ':dynamo-adapter'
-project(':dynamo-adapter').projectDir = file ('./infrastructure/driven-adapters/dynamo-adapter')
+include ':r2dbc-adapter'
+project(':r2dbc-adapter').projectDir = file ('./infrastructure/driven-adapters/r2dbc-adapter')
+
 

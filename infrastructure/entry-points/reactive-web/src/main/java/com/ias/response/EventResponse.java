@@ -10,6 +10,6 @@ import lombok.Setter;
 public class EventResponse {
     private String id;
     private String name;
-    private String status;
+    private String date;
     private String location;
 }

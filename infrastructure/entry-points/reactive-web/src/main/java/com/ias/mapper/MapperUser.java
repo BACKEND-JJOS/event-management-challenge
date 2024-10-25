@@ -3,8 +3,9 @@ package com.ias.mapper;
 import com.ias.request.UserRequest;
 import com.ias.user.User;
 import lombok.experimental.UtilityClass;
+import org.springframework.stereotype.Component;
 
-@UtilityClass
+@Component
 public class MapperUser {
 
     public User toDomain(UserRequest userRequest) {

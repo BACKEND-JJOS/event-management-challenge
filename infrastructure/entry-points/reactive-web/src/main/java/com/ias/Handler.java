@@ -2,9 +2,11 @@ package com.ias;
 
 import com.google.gson.Gson;
 import com.ias.event.Event;
+import com.ias.mapper.MapperEvent;
 import com.ias.mapper.MapperUser;
 import com.ias.request.EventRequest;
 import com.ias.request.UserRequest;
+import com.ias.response.EventResponse;
 import com.ias.response.StatusEventResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,14 +26,18 @@ public class Handler {
     private final RegisterUserToEventUseCase registerUserToEventUseCase;
     private final GetEventsByUserIdUseCase getEventsByUserIdUseCase;
     private final DeleteEventByIdUseCase deleteEventByIdUseCase;
+
+    private final MapperUser mapperUser;
+    private final MapperEvent mapperEvent;
     private final Gson mapper;
 
     public Mono<ServerResponse> listenGETEvents(ServerRequest serverRequest) {
         return getAllEventsUseCase.get()
+                .map(mapperEvent::toEventResponse)
                 .collectList()
-                .flatMap(events -> events.isEmpty()
+                .flatMap(eventResponses -> eventResponses.isEmpty()
                         ? ServerResponse.noContent().build()
-                        : ServerResponse.ok().bodyValue(events));
+                        : ServerResponse.ok().bodyValue(eventResponses));
     }
 
 
@@ -58,7 +64,7 @@ public class Handler {
 
     public Mono<ServerResponse> listenPUTRegisterUserToEvent(ServerRequest serverRequest) {
         return serverRequest.bodyToMono(UserRequest.class)
-                .map(MapperUser::toDomain)
+                .map(mapperUser::toDomain)
                 .flatMap(user ->
                         registerUserToEventUseCase.register(user, serverRequest.pathVariable("id"))
                                 .then(ServerResponse.ok().bodyValue(new StatusEventResponse("The user was registered to the event")))
