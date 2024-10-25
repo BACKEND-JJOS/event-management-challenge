@@ -1,37 +1,36 @@
 package com.ias;
 
 import com.ias.event.gateway.EventRepository;
+import com.ias.event.gateway.EventUserRepository;
 import com.ias.user.User;
+import com.ias.user.gateway.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
-
-import java.util.ArrayList;
 
 @RequiredArgsConstructor
 @Service
 public class RegisterUserToEventUseCase {
     private final EventRepository eventRepository;
 
+    private final UserRepository userRepository;
+
+    private final EventUserRepository eventUserRepository;
+
     public Mono<Void> register(User user, Integer eventId) {
         return eventRepository.getById(eventId)
-                .switchIfEmpty(Mono.error(new IllegalArgumentException("Event not found with ID: " + eventId)))
-                .flatMap(existingEvent ->
-                        Mono.justOrEmpty(existingEvent.getUserIds())
-                                .defaultIfEmpty(new ArrayList<>())
-                                .flatMap(userIds ->
-                                        Mono.just(userIds.stream().anyMatch(u -> u.getId().equals(user.getId())))
-                                                .filter(isAlreadyRegistered -> !isAlreadyRegistered)
-                                                .switchIfEmpty(Mono.error(new IllegalArgumentException("User is already registered to the event")))
-                                                .thenReturn(userIds)
+                .switchIfEmpty(Mono.error(new RuntimeException("Event not found")))
+                .flatMap(event ->
+                        userRepository.getById(user.getId())
+                                .switchIfEmpty(Mono.error(new RuntimeException("User not found")))
+                                .flatMap(existingUser ->
+                                        eventUserRepository.existsByEventIdAndUserId(existingUser.getId(), eventId)
+                                                .flatMap(userRegisteredInEvent -> userRegisteredInEvent ?
+                                                        Mono.error(new RuntimeException("The user was already registered in the event previously")) :
+                                                        eventUserRepository.save(event.getId(), existingUser.getId()).then()
+                                                )
                                 )
-                                .doOnNext(userIds -> userIds.add(user))
-                                .map(userIds -> {
-                                    existingEvent.setUserIds(userIds);
-                                    return existingEvent;
-                                })
-                )
-                .flatMap(eventRepository::update)
-                .then();
+
+                );
     }
 }

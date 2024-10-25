@@ -10,7 +10,7 @@ import org.springframework.data.relational.core.mapping.Table;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@Table("user")
+@Table("assistant")
 public class UserEntity {
     @Id
     private Integer id;

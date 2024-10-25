@@ -15,4 +15,6 @@ public interface EventRepository {
     Mono<Event> update(Event event);
 
     Mono<Void> delete(Integer id);
+
+    Flux<Event> getEventsByUserId(Integer userId);
 }

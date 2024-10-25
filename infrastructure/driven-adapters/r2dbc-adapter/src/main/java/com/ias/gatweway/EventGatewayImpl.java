@@ -46,4 +46,9 @@ public class EventGatewayImpl implements EventRepository {
     public Mono<Void> delete(Integer id) {
         return eventReactiveAdapter.delete(id);
     }
+
+    @Override
+    public Flux<Event> getEventsByUserId(Integer userId) {
+        return eventReactiveAdapter.findAllByUserId(userId);
+    }
 }

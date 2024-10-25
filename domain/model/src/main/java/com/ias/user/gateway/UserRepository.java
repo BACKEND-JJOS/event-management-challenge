@@ -4,5 +4,7 @@ import com.ias.user.User;
 import reactor.core.publisher.Mono;
 
 public interface UserRepository {
-    Mono<User> getById(String id);
+    Mono<User> getById(Integer id);
+
+    Mono<User> save(User use);
 }

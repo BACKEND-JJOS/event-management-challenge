@@ -14,6 +14,6 @@ import org.springframework.data.relational.core.mapping.Table;
 public class EventUserEntity {
     @Id
     private Integer id;
-    private String eventId;
-    private String userId;
+    private Integer eventId;
+    private Integer userId;
 }
