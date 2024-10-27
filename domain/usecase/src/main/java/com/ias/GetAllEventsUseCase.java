@@ -12,7 +12,7 @@ public class GetAllEventsUseCase {
 
     private  final EventRepository eventRepository;
 
-    public Flux<Event> get(){
-        return eventRepository.getAll();
+    public Flux<Event> get(String traceUUID){
+        return eventRepository.getAll(traceUUID);
     }
 }

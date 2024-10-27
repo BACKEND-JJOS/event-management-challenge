@@ -12,7 +12,7 @@ public class GetEventsByUserIdUseCase {
 
     private final EventRepository eventRepository;
 
-    public Flux<Event> execute(Integer userId) {
-        return eventRepository.getEventsByUserId(userId);
+    public Flux<Event> execute(Integer userId, String traceUUID) {
+        return eventRepository.getEventsByUserId(userId, traceUUID);
     }
 }

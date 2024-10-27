@@ -1,10 +1,9 @@
 package com.ias;
 
 import com.ias.entity.EventEntity;
-import com.ias.event.Event;
 import com.ias.repository.EventReactiveRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.r2dbc.core.DatabaseClient;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -12,35 +11,50 @@ import reactor.core.publisher.Mono;
 
 @RequiredArgsConstructor
 @Service
-public class EventReactiveAdapter  {
+@Slf4j
+public class EventReactiveAdapter {
 
     private final EventReactiveRepository eventReactiveRepository;
 
-    public Flux<EventEntity> getAll() {
-        return eventReactiveRepository.findAll();
+    private static final String MESSAGE_LOG_TRACE = "ADAPTER RUN {} WITH TRACE {}";
+
+    public Flux<EventEntity> getAll(String traceUUID) {
+        return eventReactiveRepository.findAll()
+                .doOnSubscribe(subscription -> log.debug(MESSAGE_LOG_TRACE, "get_all", traceUUID))
+                .doOnError(error -> log.error(MESSAGE_LOG_TRACE, error, traceUUID));
     }
 
-    public Mono<EventEntity> getById(Integer id) {
-        return eventReactiveRepository.findById(id);
+    public Mono<EventEntity> getById(Integer id, String traceUUID) {
+        return eventReactiveRepository.findById(id)
+                .doOnSubscribe(subscription -> log.debug(MESSAGE_LOG_TRACE, "get_by_id", traceUUID))
+                .doOnError(error -> log.error(MESSAGE_LOG_TRACE, error, traceUUID));
     }
 
-    public Mono<EventEntity> save(EventEntity eventEntity) {
-        return eventReactiveRepository.save(eventEntity);
+    public Mono<EventEntity> save(EventEntity eventEntity, String traceUUID) {
+        return eventReactiveRepository.save(eventEntity)
+                .doOnSubscribe(subscription -> log.debug(MESSAGE_LOG_TRACE, "save", traceUUID))
+                .doOnError(error -> log.error(MESSAGE_LOG_TRACE, error, traceUUID));
     }
 
-    public Mono<EventEntity> update(EventEntity eventEntity) {
+    public Mono<EventEntity> update(EventEntity eventEntity, String traceUUID) {
         return eventReactiveRepository.findById(eventEntity.getId())
                 .flatMap(existingEvent -> {
                     eventEntity.setId(existingEvent.getId());
                     return eventReactiveRepository.save(eventEntity);
-                });
+                })
+                .doOnSubscribe(subscription -> log.debug(MESSAGE_LOG_TRACE, "update", traceUUID))
+                .doOnError(error -> log.error(MESSAGE_LOG_TRACE, error, traceUUID));
     }
 
-    public Mono<Void> delete(Integer id) {
-        return eventReactiveRepository.deleteById(id);
+    public Mono<Void> delete(Integer id, String traceUUID) {
+        return eventReactiveRepository.deleteById(id)
+                .doOnSubscribe(subscription -> log.debug(MESSAGE_LOG_TRACE, "delete", traceUUID))
+                .doOnError(error -> log.error(MESSAGE_LOG_TRACE, error, traceUUID));
     }
 
-    public Flux<EventEntity> findAllByUserId(Integer userId) {
-        return eventReactiveRepository.findAllByUserId(userId);
+    public Flux<EventEntity> findAllByUserId(Integer userId, String traceUUID) {
+        return eventReactiveRepository.findAllByUserId(userId)
+                .doOnSubscribe(subscription -> log.debug(MESSAGE_LOG_TRACE, "find_all_by_user_id", traceUUID))
+                .doOnError(error -> log.error(MESSAGE_LOG_TRACE, error, traceUUID));
     }
 }

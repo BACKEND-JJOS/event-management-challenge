@@ -15,4 +15,5 @@ project(':reactive-web').projectDir = file ('./infrastructure/entry-points/react
 include ':r2dbc-adapter'
 project(':r2dbc-adapter').projectDir = file ('./infrastructure/driven-adapters/r2dbc-adapter')
 
-
+include 'rabbit-adapter'
+project(':rabbit-adapter').projectDir = file ('./infrastructure/driven-adapters/rabbit-adapter')

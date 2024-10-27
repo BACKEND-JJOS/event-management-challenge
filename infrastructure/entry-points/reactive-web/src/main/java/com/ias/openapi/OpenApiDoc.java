@@ -1,5 +1,6 @@
 package com.ias.openapi;
 
+import com.ias.exception.ErrorResponse;
 import com.ias.request.EventRequest;
 import com.ias.request.UserRequest;
 import com.ias.response.EventResponse;
@@ -19,6 +20,9 @@ import static org.springdoc.core.fn.builders.schema.Builder.schemaBuilder;
 public class OpenApiDoc {
 
     private static final String MEDIA_TYPE_APPLICATION_JSON = "application/json";
+
+    private static final String TYPE_INTEGER = "integer";
+    private static final String TYPE_INTEGER_FORMAT = "int32";
     private static final String TAG_EVENT = "Event";
     private static final String TAG_USER = "User";
 
@@ -57,7 +61,7 @@ public class OpenApiDoc {
                         .in(ParameterIn.PATH)
                         .required(true)
                         .example("9999")
-                        .schema(schemaBuilder().type("integer").format("int32"))
+                        .schema(schemaBuilder().type(TYPE_INTEGER).format(TYPE_INTEGER_FORMAT))
                 )
                 .response(
                         responseBuilder()
@@ -96,6 +100,20 @@ public class OpenApiDoc {
                 )
                 .response(
                         responseBuilder()
+                                .responseCode(HttpStatus.BAD_REQUEST.toString())
+                                .description("""
+                                                 The event does not conform to the expected date format. 
+                                                 The event must start at least 30 minutes after the current time.
+                                                  """)
+                                .content(
+                                        contentBuilder()
+                                                .mediaType(MEDIA_TYPE_APPLICATION_JSON)
+                                                .schema(schemaBuilder().implementation(ErrorResponse.class))
+                                )
+
+                )
+                .response(
+                        responseBuilder()
                                 .responseCode(HttpStatus.CREATED.toString())
                                 .description("Event created or updated successfully")
                                 .content(
@@ -116,7 +134,7 @@ public class OpenApiDoc {
                         .in(ParameterIn.PATH)
                         .required(true)
                         .example("9999")
-                        .schema(schemaBuilder().type("integer").format("int32"))
+                        .schema(schemaBuilder().type(TYPE_INTEGER).format(TYPE_INTEGER_FORMAT))
                 )
                 .response(
                         responseBuilder()
@@ -126,6 +144,16 @@ public class OpenApiDoc {
                                         contentBuilder()
                                                 .mediaType(MEDIA_TYPE_APPLICATION_JSON)
                                                 .schema(schemaBuilder().implementation(StatusEventResponse.class))
+                                )
+                )
+                .response(
+                        responseBuilder()
+                                .responseCode(HttpStatus.NOT_FOUND.toString())
+                                .description("Event not found")
+                                .content(
+                                        contentBuilder()
+                                                .mediaType(MEDIA_TYPE_APPLICATION_JSON)
+                                                .schema(schemaBuilder().implementation(String.class))
                                 )
                 )
                 .tag(TAG_EVENT);
@@ -140,7 +168,7 @@ public class OpenApiDoc {
                         .in(ParameterIn.PATH)
                         .required(true)
                         .example("9999")
-                        .schema(schemaBuilder().type("integer").format("int32"))
+                        .schema(schemaBuilder().type(TYPE_INTEGER).format(TYPE_INTEGER_FORMAT))
                 )
                 .requestBody(
                         requestBodyBuilder()
@@ -172,7 +200,7 @@ public class OpenApiDoc {
                         .in(ParameterIn.PATH)
                         .required(true)
                         .example("9999")
-                        .schema(schemaBuilder().type("integer").format("int32"))
+                        .schema(schemaBuilder().type(TYPE_INTEGER).format(TYPE_INTEGER_FORMAT))
                 )
                 .response(
                         responseBuilder()

@@ -2,7 +2,6 @@ package com.ias.mapper;
 
 import com.ias.event.Event;
 import com.ias.response.EventResponse;
-import lombok.experimental.UtilityClass;
 import org.springframework.stereotype.Component;
 
 @Component
