@@ -5,17 +5,22 @@ import com.ias.event.Event;
 import com.ias.mapper.MapperEvent;
 import com.ias.mapper.MapperUser;
 import com.ias.request.EventRequest;
+import com.ias.request.UserLoginRequest;
 import com.ias.request.UserRequest;
 import com.ias.response.StatusEventResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 import reactor.util.context.Context;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @Component
@@ -98,5 +103,7 @@ public class Handler {
 
     }
 
-
+    public Mono<ServerResponse> listenGETLogin(ServerRequest serverRequest) {
+        return ServerResponse.ok().bodyValue("HOLA");
+    }
 }

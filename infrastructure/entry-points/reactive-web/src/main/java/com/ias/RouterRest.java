@@ -14,6 +14,7 @@ import static org.springdoc.webflux.core.fn.SpringdocRouteBuilder.route;
 public class RouterRest {
 
     private static final String EVENTS_ROUTE = "/events";
+    private static final String AUTH_ROUTE = "/auth/login";
     private static final String ID_PATH_PARAM = "/{id}";
 
     @Bean
@@ -25,6 +26,7 @@ public class RouterRest {
                 .GET(EVENTS_ROUTE + ID_PATH_PARAM, handler::listenGETEventById, OpenApiDoc::getEventById)
                 .PUT(EVENTS_ROUTE, handler::listenPUTCreateOrUpdateEvent, OpenApiDoc::createOrUpdateEvent)
                 .DELETE(EVENTS_ROUTE + ID_PATH_PARAM, handler::listenDELETEEvent, OpenApiDoc::deleteEvent)
+                .GET(AUTH_ROUTE, handler::listenGETLogin, OpenApiDoc::getEventById)
                 .build();
     }
 
