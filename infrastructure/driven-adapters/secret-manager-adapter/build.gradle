@@ -1,0 +1,5 @@
+dependencies {
+    implementation 'software.amazon.awssdk:secretsmanager:2.29.1'
+
+
+}

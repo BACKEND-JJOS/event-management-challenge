@@ -17,3 +17,7 @@ project(':r2dbc-adapter').projectDir = file ('./infrastructure/driven-adapters/r
 
 include 'rabbit-adapter'
 project(':rabbit-adapter').projectDir = file ('./infrastructure/driven-adapters/rabbit-adapter')
+
+include ':secret-manager-adapter'
+project(':secret-manager-adapter').projectDir = file('./infrastructure/driven-adapters/secret-manager-adapter')
+

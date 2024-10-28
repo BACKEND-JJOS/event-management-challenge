@@ -12,12 +12,6 @@ spring:
     name: event-management-challenge
   profiles:
     active: dev
-  rabbitmq:
-    host: localhost
-    port: 5672
-    username: guest
-    password: guest
-    virtual-host: /
   r2dbc:
     url: r2dbc:postgresql://localhost:5432/postgres
     username: postgres
@@ -27,6 +21,6 @@ logging:
     com.ias: DEBUG
     org.slf4j: DEBUG
 aws:
-  dynamodb:
-    endpoint: "http://localhost:8010"
   region: "us-east-1"
+  secrets:
+    rabbitmq-secret-name: "rabbitmq-secret-name"
