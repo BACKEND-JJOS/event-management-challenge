@@ -1,23 +1,22 @@
 rootProject.name = 'event-management-challenge'
 
 include ':app-service'
-project(':app-service').projectDir = file ('./application/app-service')
+project(':app-service').projectDir = file('./application/app-service')
 
 include ':model'
-project(':model').projectDir = file ('./domain/model')
+project(':model').projectDir = file('./domain/model')
 
 include ':usecase'
-project(':usecase').projectDir = file ('./domain/usecase')
+project(':usecase').projectDir = file('./domain/usecase')
 
 include ':reactive-web'
-project(':reactive-web').projectDir = file ('./infrastructure/entry-points/reactive-web')
+project(':reactive-web').projectDir = file('./infrastructure/entry-points/reactive-web')
 
 include ':r2dbc-adapter'
-project(':r2dbc-adapter').projectDir = file ('./infrastructure/driven-adapters/r2dbc-adapter')
+project(':r2dbc-adapter').projectDir = file('./infrastructure/driven-adapters/r2dbc-adapter')
 
 include 'rabbit-adapter'
-project(':rabbit-adapter').projectDir = file ('./infrastructure/driven-adapters/rabbit-adapter')
+project(':rabbit-adapter').projectDir = file('./infrastructure/driven-adapters/rabbit-adapter')
 
-include ':secret-manager-adapter'
-project(':secret-manager-adapter').projectDir = file('./infrastructure/driven-adapters/secret-manager-adapter')
-
+include ':secret-manager'
+project(':secret-manager').projectDir = file('./helpers/secret-manager')
