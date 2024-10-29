@@ -10,13 +10,12 @@ import reactor.core.publisher.Mono;
 
 @Service
 @RequiredArgsConstructor
-public class GetUerByUsername implements ReactiveUserDetailsService {
+public class GetUerByUsernameUseCase implements ReactiveUserDetailsService {
     @Override
     public Mono<UserDetails> findByUsername(String username) {
-        String pass = new BCryptPasswordEncoder().encode("user");
-        System.out.println(pass);
+
         return Mono.just(User.withUsername("user")
-                .password(pass)
+                .password(new BCryptPasswordEncoder().encode("user"))
                 .accountExpired(false)
                 .accountLocked(false)
                 .credentialsExpired(false)
@@ -24,4 +23,5 @@ public class GetUerByUsername implements ReactiveUserDetailsService {
                 .build()
         );
     }
+
 }

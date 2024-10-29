@@ -24,3 +24,10 @@ aws:
   region: "us-east-1"
   secrets:
     rabbitmq-secret-name: "rabbitmq-secret-name"
+
+security:
+  jwt:
+    key:
+      private: a01aafbfe92bcef60384cb19fdb8812ad61504e95510f71b5a28c575721ef13c
+    user:
+      generator: AUTH_JWT_BACKEND
