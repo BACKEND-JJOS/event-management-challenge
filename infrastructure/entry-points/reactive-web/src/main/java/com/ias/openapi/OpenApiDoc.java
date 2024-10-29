@@ -2,10 +2,17 @@ package com.ias.openapi;
 
 import com.ias.exception.ErrorResponse;
 import com.ias.request.EventRequest;
+import com.ias.request.UserLoginRequest;
 import com.ias.request.UserRequest;
+import com.ias.response.AuthResponse;
 import com.ias.response.EventResponse;
 import com.ias.response.StatusEventResponse;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import lombok.experimental.UtilityClass;
 import org.springdoc.core.fn.builders.operation.Builder;
 import org.springframework.http.HttpStatus;
@@ -15,8 +22,11 @@ import static org.springdoc.core.fn.builders.content.Builder.contentBuilder;
 import static org.springdoc.core.fn.builders.parameter.Builder.parameterBuilder;
 import static org.springdoc.core.fn.builders.requestbody.Builder.requestBodyBuilder;
 import static org.springdoc.core.fn.builders.schema.Builder.schemaBuilder;
+import static org.springdoc.core.fn.builders.securityrequirement.Builder.securityRequirementBuilder;
 
 @UtilityClass
+@OpenAPIDefinition(info = @Info(title = "API Events", version = "1.0"))
+@SecurityScheme(name = "BearerAuth", type = SecuritySchemeType.APIKEY,in = SecuritySchemeIn.HEADER , description = "Enter the token with the `Bearer: ` prefix, e.g. Bearer abcde12345")
 public class OpenApiDoc {
 
     private static final String MEDIA_TYPE_APPLICATION_JSON = "application/json";
@@ -55,6 +65,7 @@ public class OpenApiDoc {
     public Builder getEventById(Builder builder) {
         return builder.operationId("getEventById")
                 .description("Get details of a specific event by its ID")
+                .security(securityRequirementBuilder().name("Bearer"))
                 .parameter(parameterBuilder()
                         .name("id")
                         .description("The Id of the event to retrieve")
@@ -102,9 +113,9 @@ public class OpenApiDoc {
                         responseBuilder()
                                 .responseCode(HttpStatus.BAD_REQUEST.toString())
                                 .description("""
-                                                 The event does not conform to the expected date format. 
-                                                 The event must start at least 30 minutes after the current time.
-                                                  """)
+                                        The event does not conform to the expected date format. 
+                                        The event must start at least 30 minutes after the current time.
+                                         """)
                                 .content(
                                         contentBuilder()
                                                 .mediaType(MEDIA_TYPE_APPLICATION_JSON)
@@ -213,5 +224,40 @@ public class OpenApiDoc {
                                 )
                 )
                 .tag(TAG_USER);
+    }
+
+    public Builder postLogin(Builder builder) {
+        return builder.operationId("login")
+                .description("Authenticate user and generate a JWT token.")
+                .requestBody(
+                        requestBodyBuilder()
+                                .required(true)
+                                .content(
+                                        contentBuilder()
+                                                .mediaType(MEDIA_TYPE_APPLICATION_JSON)
+                                                .schema(schemaBuilder().implementation(UserLoginRequest.class))
+                                )
+                )
+                .response(
+                        responseBuilder()
+                                .responseCode(HttpStatus.OK.toString())
+                                .description("Successful authentication with JWT token")
+                                .content(
+                                        contentBuilder()
+                                                .mediaType(MEDIA_TYPE_APPLICATION_JSON)
+                                                .schema(schemaBuilder().implementation(AuthResponse.class))
+                                )
+                )
+                .response(
+                        responseBuilder()
+                                .responseCode(HttpStatus.UNAUTHORIZED.toString())
+                                .description("Invalid username or password")
+                                .content(
+                                        contentBuilder()
+                                                .mediaType(MEDIA_TYPE_APPLICATION_JSON)
+                                                .schema(schemaBuilder().implementation(String.class))
+                                )
+                )
+                .tag("Authentication");
     }
 }

@@ -36,7 +36,7 @@ public class JwtTokenValidatorFilter implements WebFilter {
                 String username = jwtUtils.extractUsername(decodedJWT);
                 String authoritiesString = jwtUtils.getSpecificClaim(decodedJWT, "authorities").asString();
                 var authorities = AuthorityUtils.commaSeparatedStringToAuthorityList(authoritiesString);
-
+                System.out.println("valida token");
                 // Crea un token de autenticación con el contexto de seguridad reactivo
                 UsernamePasswordAuthenticationToken authToken =
                         new UsernamePasswordAuthenticationToken(username, null, authorities);

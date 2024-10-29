@@ -26,7 +26,7 @@ public class RouterRest {
                 .GET(EVENTS_ROUTE + ID_PATH_PARAM, handler::listenGETEventById, OpenApiDoc::getEventById)
                 .PUT(EVENTS_ROUTE, handler::listenPUTCreateOrUpdateEvent, OpenApiDoc::createOrUpdateEvent)
                 .DELETE(EVENTS_ROUTE + ID_PATH_PARAM, handler::listenDELETEEvent, OpenApiDoc::deleteEvent)
-                .POST(AUTH_ROUTE, handler::listenPOSTLogin, OpenApiDoc::getEventById)
+                .POST(AUTH_ROUTE, handler::listenPOSTLogin, OpenApiDoc::postLogin)
                 .build();
     }
 

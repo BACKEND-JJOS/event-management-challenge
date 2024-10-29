@@ -92,3 +92,13 @@ El contenedor almacenará los datos de forma persistente en un volumen de Docker
 Una vez ejecute el proyecto puede hacer uso de los endpoint, recuerde que si desea ver la documentación swagger puede entra a
 
     http://localhost:8081/iasapi/doc/swagger-ui/webjars/swagger-ui/index.html#/
+
+Usuario de prueba para generar el token
+
+    curl - POST 'http://localhost:8081/iasapi/auth/login'
+
+    body 
+    {
+        "userName":"user",
+        "password":"user"
+    }
