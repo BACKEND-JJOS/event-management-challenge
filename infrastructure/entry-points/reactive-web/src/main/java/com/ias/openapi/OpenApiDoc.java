@@ -13,8 +13,11 @@ import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
 import lombok.experimental.UtilityClass;
 import org.springdoc.core.fn.builders.operation.Builder;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 
 import static org.springdoc.core.fn.builders.apiresponse.Builder.responseBuilder;
@@ -23,10 +26,11 @@ import static org.springdoc.core.fn.builders.parameter.Builder.parameterBuilder;
 import static org.springdoc.core.fn.builders.requestbody.Builder.requestBodyBuilder;
 import static org.springdoc.core.fn.builders.schema.Builder.schemaBuilder;
 import static org.springdoc.core.fn.builders.securityrequirement.Builder.securityRequirementBuilder;
-
+import static  io.swagger.v3.oas.models.security.SecurityScheme.In;
+import static  io.swagger.v3.oas.models.security.SecurityScheme.Type;
 @UtilityClass
 @OpenAPIDefinition(info = @Info(title = "API Events", version = "1.0"))
-@SecurityScheme(name = "BearerAuth", type = SecuritySchemeType.APIKEY,in = SecuritySchemeIn.HEADER , description = "Enter the token with the `Bearer: ` prefix, e.g. Bearer abcde12345")
+@SecurityScheme(name = "BearerAuth", scheme = "bearer", bearerFormat = "JWT", type = SecuritySchemeType.HTTP, in = SecuritySchemeIn.HEADER)
 public class OpenApiDoc {
 
     private static final String MEDIA_TYPE_APPLICATION_JSON = "application/json";
@@ -39,6 +43,7 @@ public class OpenApiDoc {
     public Builder getEvents(Builder builder) {
         return builder.operationId("getEvents")
                 .description("Get the list of all events")
+                .security(securityRequirementBuilder().name("BearerAuth"))
                 .response(
                         responseBuilder()
                                 .responseCode(HttpStatus.OK.toString())
@@ -65,7 +70,7 @@ public class OpenApiDoc {
     public Builder getEventById(Builder builder) {
         return builder.operationId("getEventById")
                 .description("Get details of a specific event by its ID")
-                .security(securityRequirementBuilder().name("Bearer"))
+                .security(securityRequirementBuilder().name("BearerAuth"))
                 .parameter(parameterBuilder()
                         .name("id")
                         .description("The Id of the event to retrieve")
@@ -100,6 +105,7 @@ public class OpenApiDoc {
     public Builder createOrUpdateEvent(Builder builder) {
         return builder.operationId("createOrUpdateEvent")
                 .description("Create a new event or update an existing one")
+                .security(securityRequirementBuilder().name("BearerAuth"))
                 .requestBody(
                         requestBodyBuilder()
                                 .required(true)
@@ -139,6 +145,7 @@ public class OpenApiDoc {
     public Builder deleteEvent(Builder builder) {
         return builder.operationId("deleteEvent")
                 .description("Delete an event by its ID")
+                .security(securityRequirementBuilder().name("BearerAuth"))
                 .parameter(parameterBuilder()
                         .name("id")
                         .description("The id of the event to be deleted")
@@ -173,6 +180,7 @@ public class OpenApiDoc {
     public Builder registerUserToEvent(Builder builder) {
         return builder.operationId("registerUserToEvent")
                 .description("Register a user for a specific event")
+                .security(securityRequirementBuilder().name("BearerAuth"))
                 .parameter(parameterBuilder()
                         .name("id")
                         .description("Id of the event that the user wants to register")
@@ -205,6 +213,7 @@ public class OpenApiDoc {
     public Builder getEventsByUserId(Builder builder) {
         return builder.operationId("getEventsByUserId")
                 .description("Retrieve a list of events for which the user is registered")
+                .security(securityRequirementBuilder().name("BearerAuth"))
                 .parameter(parameterBuilder()
                         .name("userId")
                         .description("Id of the user who requires their events")
