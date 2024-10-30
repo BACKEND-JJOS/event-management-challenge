@@ -10,10 +10,10 @@ import org.springframework.data.relational.core.mapping.Table;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@Table("event_user")
+@Table("event_assistant")
 public class EventUserEntity {
     @Id
     private Integer id;
     private Integer eventId;
-    private Integer userId;
+    private Integer assistantId;
 }

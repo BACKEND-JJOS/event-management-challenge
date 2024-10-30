@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   db:
     image: postgres:14.1-alpine
@@ -9,6 +11,7 @@ services:
       - '5432:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/data
+
   rabbit:
     image: rabbitmq:4.0.2-management
     container_name: rabbit
@@ -24,9 +27,33 @@ services:
     networks:
       - rabbitmq_network
 
+  prometheus:
+    image: prom/prometheus
+    restart: always
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - monitoring
+
+  grafana:
+    image: grafana/grafana
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=your_password  # Cambia esto por una contraseña segura
+    networks:
+      - monitoring
+
 networks:
   rabbitmq_network:
+    driver: bridge
+  monitoring:
     driver: bridge
 
 volumes:
   postgres_data:
+  rabbitmq_data:
+  rabbitmq_log:
