@@ -25,8 +25,8 @@ public class EventInputValidator {
     public static Mono<Void> validateDateFormat(String date) {
         return Mono.just(date)
                 .map(d -> LocalDateTime.parse(d, DATE_FORMAT))
+                .then()
                 .onErrorMap(DateTimeParseException.class, e ->
-                        new BusinessException(BusinessEventErrorCode.INVALID_DATE_FORMAT)) // Mapea el error de parseo.
-                .then();
+                        new BusinessException(BusinessEventErrorCode.INVALID_DATE_FORMAT));
     }
 }

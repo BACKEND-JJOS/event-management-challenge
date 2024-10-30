@@ -13,11 +13,8 @@ import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
-import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.security.SecurityRequirement;
 import lombok.experimental.UtilityClass;
 import org.springdoc.core.fn.builders.operation.Builder;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 
 import static org.springdoc.core.fn.builders.apiresponse.Builder.responseBuilder;
@@ -26,8 +23,7 @@ import static org.springdoc.core.fn.builders.parameter.Builder.parameterBuilder;
 import static org.springdoc.core.fn.builders.requestbody.Builder.requestBodyBuilder;
 import static org.springdoc.core.fn.builders.schema.Builder.schemaBuilder;
 import static org.springdoc.core.fn.builders.securityrequirement.Builder.securityRequirementBuilder;
-import static  io.swagger.v3.oas.models.security.SecurityScheme.In;
-import static  io.swagger.v3.oas.models.security.SecurityScheme.Type;
+
 @UtilityClass
 @OpenAPIDefinition(info = @Info(title = "API Events", version = "1.0"))
 @SecurityScheme(name = "BearerAuth", scheme = "bearer", bearerFormat = "JWT", type = SecuritySchemeType.HTTP, in = SecuritySchemeIn.HEADER)

@@ -16,6 +16,10 @@ spring:
     url: r2dbc:postgresql://localhost:5432/postgres
     username: postgres
     password: postgres
+management:
+  endpoints:
+    web.exposure.include: '*'
+    endpoint.health.show-details: 'always'
 logging:
   level:
     com.ias: DEBUG

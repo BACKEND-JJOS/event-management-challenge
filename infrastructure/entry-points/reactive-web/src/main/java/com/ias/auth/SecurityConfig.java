@@ -28,6 +28,7 @@ public class SecurityConfig {
                 .authorizeExchange(exchanges -> exchanges
                         .pathMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .pathMatchers("/doc/swagger-ui/**", "/doc/api-docs/**", "/v3/api-docs/**").permitAll()
+                        .pathMatchers("/actuator/**").permitAll()
                         .pathMatchers(HttpMethod.GET, "/events/**").hasAuthority("READ")
                         .pathMatchers(HttpMethod.PUT, "/events/**").hasAuthority("WRITE")
                         .pathMatchers(HttpMethod.DELETE, "/events/**").hasAuthority("WRITE")
