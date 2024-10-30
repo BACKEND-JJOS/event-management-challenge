@@ -6,15 +6,21 @@ CREATE TABLE "event"
     location VARCHAR(255)
 );
 
-CREATE TABLE "user"
+CREATE TABLE "assistant"
 (
     id SERIAL PRIMARY KEY
 );
 
-CREATE TABLE "event_user"
+CREATE TABLE "event_assistant"
 (
     id       SERIAL PRIMARY KEY,
     event_id INTEGER REFERENCES "event" (id),
-    user_id  INTEGER REFERENCES "user" (id),
-    UNIQUE (event_id, user_id) -- Para evitar duplicados
+    assistant_id  INTEGER REFERENCES "assistant" (id),
+    UNIQUE (event_id, assistant_id) -- Para evitar duplicados
 );
+
+
+--Ejecute para tener usuarios registrados
+INSERT INTO "assistant" DEFAULT VALUES; -- Asistente 1
+INSERT INTO "assistant" DEFAULT VALUES; -- Asistente 2
+INSERT INTO "assistant" DEFAULT VALUES; -- Asistente 3

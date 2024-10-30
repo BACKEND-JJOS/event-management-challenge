@@ -1,9 +1,9 @@
 package com.ias.repository;
 
-import com.ias.entity.EventUserEntity;
+import com.ias.entity.EventAssistantEntity;
 import org.springframework.data.r2dbc.repository.R2dbcRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface EventUserRepository extends R2dbcRepository<EventUserEntity, Integer> {
+public interface EventUserRepository extends R2dbcRepository<EventAssistantEntity, Integer> {
 }

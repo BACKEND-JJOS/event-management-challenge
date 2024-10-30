@@ -1,0 +1,3 @@
+VHOST: /
+QUEUE: event.deleted.notifications.queue
+INDEX: v2

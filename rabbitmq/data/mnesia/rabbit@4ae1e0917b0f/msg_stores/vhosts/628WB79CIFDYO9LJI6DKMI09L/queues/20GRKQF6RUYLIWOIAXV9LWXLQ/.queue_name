@@ -1,0 +1,3 @@
+VHOST: /
+QUEUE: event.updated.notifications.queue
+INDEX: v2

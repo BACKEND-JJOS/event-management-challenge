@@ -99,6 +99,6 @@ Usuario de prueba para generar el token
 
     body 
     {
-        "userName":"user",
-        "password":"user"
+        "userName":"assistant",
+        "password":"assistant"
     }

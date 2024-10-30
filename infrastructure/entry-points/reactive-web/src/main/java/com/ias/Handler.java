@@ -14,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
@@ -29,7 +28,7 @@ public class Handler {
     private final GetEventByIdUseCase getEventByIdUseCase;
     private final GetAllEventsUseCase getAllEventsUseCase;
     private final CreateOrUpdateEventUseCase createOrUpdateEventUseCase;
-    private final RegisterUserToEventUseCase registerUserToEventUseCase;
+    private final RegisterAssistantToEventUseCase registerAssistantToEventUseCase;
     private final GetEventsByUserIdUseCase getEventsByUserIdUseCase;
     private final DeleteEventByIdUseCase deleteEventByIdUseCase;
     private final UserAuthenticationUseCase userAuthenticationUseCase;
@@ -85,7 +84,7 @@ public class Handler {
         return serverRequest.bodyToMono(UserRequest.class)
                 .map(mapperUser::toDomain)
                 .flatMap(user ->
-                        registerUserToEventUseCase.register(user, Integer.valueOf(serverRequest.pathVariable("id")),traceUUID)
+                        registerAssistantToEventUseCase.register(user, Integer.valueOf(serverRequest.pathVariable("id")),traceUUID)
                                 .then(ServerResponse.ok().bodyValue(new StatusEventResponse("The user was registered to the event")))
                 );
     }

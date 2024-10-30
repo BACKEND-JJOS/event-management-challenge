@@ -37,7 +37,7 @@ class RouterRestTest {
     @MockBean
     private CreateOrUpdateEventUseCase createOrUpdateEventUseCase;
     @MockBean
-    private RegisterUserToEventUseCase registerUserToEventUseCase;
+    private RegisterAssistantToEventUseCase registerAssistantToEventUseCase;
     @MockBean
     private GetEventsByUserIdUseCase getEventsByUserIdUseCase;
     @MockBean

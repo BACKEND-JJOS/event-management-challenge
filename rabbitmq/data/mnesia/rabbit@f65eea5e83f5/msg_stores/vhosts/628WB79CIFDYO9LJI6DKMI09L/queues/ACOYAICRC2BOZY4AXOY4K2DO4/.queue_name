@@ -1,0 +1,3 @@
+VHOST: /
+QUEUE: user.event.register.notifications.queue
+INDEX: v2

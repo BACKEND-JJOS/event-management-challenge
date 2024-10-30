@@ -34,6 +34,9 @@ subprojects {
         implementation 'org.springframework.boot:spring-boot-starter-security:3.3.5'
 
         implementation 'org.springframework.boot:spring-boot-starter-actuator'
+        implementation 'io.micrometer:micrometer-core'
+        implementation 'io.micrometer:micrometer-registry-prometheus'
+
 
         testImplementation 'org.springframework.boot:spring-boot-starter-test:3.3.5'
         testImplementation 'org.mockito:mockito-junit-jupiter:5.2.0'

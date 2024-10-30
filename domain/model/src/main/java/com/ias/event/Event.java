@@ -1,6 +1,6 @@
 package com.ias.event;
 
-import com.ias.user.User;
+import com.ias.user.Assistant;
 import lombok.*;
 
 import java.util.List;
@@ -17,5 +17,5 @@ public class Event {
     private String name;
     private String date;
     private String location;
-    private List<User> userIds;
+    private List<Assistant> assistantIds;
 }
