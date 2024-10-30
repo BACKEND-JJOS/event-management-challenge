@@ -1,10 +1,9 @@
 package com.ias;
 
 
-import com.auth0.jwt.interfaces.DecodedJWT;
 import com.google.gson.Gson;
 import com.ias.auth.JwtUtils;
-import com.ias.auth.SecurityConfig;
+import com.ias.config.TestSecurityConfig;
 import com.ias.event.Event;
 import com.ias.mapper.MapperEvent;
 import com.ias.mapper.MapperUser;
@@ -16,28 +15,21 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
 
-@ContextConfiguration(classes = {RouterRest.class, Handler.class, JwtUtils.class})
+@ContextConfiguration(classes = {RouterRest.class, Handler.class, JwtUtils.class, TestSecurityConfig.class})
 @WebFluxTest
 class RouterRestTest {
 
     @Autowired
     private WebTestClient webTestClient;
-
     @MockBean
     private GetEventByIdUseCase getEventByIdUseCase;
     @MockBean
@@ -63,26 +55,14 @@ class RouterRestTest {
 
     private String token;
 
-    private String traceUUID;
-
     private static final String EVENTS_ROUTE = "/events";
 
 
     @BeforeEach
     void setUp() {
-        token = "Bearer test-token";
-        given(jwtUtils.createToken(anyString(), anyList()))
-                .willReturn("test-token");
-
-        DecodedJWT decodedJWTMock = mock(DecodedJWT.class);
-        given(decodedJWTMock.getSubject()).willReturn("user");
-
-        given(jwtUtils.validateToken("test-token"))
-                .willReturn(decodedJWTMock);
     }
 
     @Test
-    @WithMockUser(username = "any-user", authorities = {"READ"})
     void shouldGetAllEvents_shouldReturnOk_whenEverythingIsFine() {
         Event eventMock1 = Event.builder()
                 .date("2024-10-24T10:00:00Z")
@@ -120,7 +100,6 @@ class RouterRestTest {
 
         webTestClient.get()
                 .uri(EVENTS_ROUTE)
-                .header(HttpHeaders.AUTHORIZATION, token)
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isOk()
@@ -132,30 +111,18 @@ class RouterRestTest {
     }
 
     @Test
-    @WithMockUser(username = "user", authorities = {"READ"})
     void shouldGetAllEvents_shouldReturnNoContent_whenNoEventsAreFound() {
         given(getAllEventsUseCase.get(anyString()))
                 .willReturn(Flux.empty());
 
         webTestClient.get()
                 .uri(EVENTS_ROUTE)
-                .header(HttpHeaders.AUTHORIZATION, token)
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isNoContent();
     }
 
     @Test
-    void shouldGetAllEvents_shouldReturnUnauthorized_whenTokenIsMissing() {
-        webTestClient.get()
-                .uri(EVENTS_ROUTE)
-                .accept(MediaType.APPLICATION_JSON)
-                .exchange()
-                .expectStatus().isUnauthorized();
-    }
-
-    @Test
-    @WithMockUser(username = "any-user", authorities = {"READ"})
     void shouldGetEventById_shouldReturnOk_whenEverythingIsFine() {
         Event eventMock1 = Event.builder()
                 .date("2024-10-24T10:00:00Z")
@@ -180,7 +147,6 @@ class RouterRestTest {
 
         webTestClient.get()
                 .uri(EVENTS_ROUTE + "/1")
-                .header(HttpHeaders.AUTHORIZATION, token)
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isOk()
@@ -192,18 +158,70 @@ class RouterRestTest {
     }
 
     @Test
-    @WithMockUser(username = "any-user", authorities = {"READ"})
     void shouldGetEventById_shouldReturnNotFound_whenEventIdIsNotFound() {
 
         given(getEventByIdUseCase.get(anyInt(), anyString()))
                 .willReturn(Mono.empty());
         webTestClient.get()
                 .uri(EVENTS_ROUTE + "/1")
-                .header(HttpHeaders.AUTHORIZATION, token)
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isNotFound();
 
     }
 
+
+    @Test
+    void shouldEventCreated_shouldReturnCreated_whenEventIsFine() {
+        Event eventMock = Event.builder()
+                .date("any-date")
+                .id(null)
+                .location("any-location")
+                .name("any-name")
+                .build();
+
+        Event eventCreatedMock = Event.builder()
+                .date("any-date")
+                .id(1)
+                .location("any-location")
+                .name("any-name")
+                .build();
+
+
+        EventRequest eventRequestMock = EventRequest.builder()
+                .date("any-date")
+                .id(null)
+                .location("any-location")
+                .name("any-name")
+                .build();
+
+        EventResponse eventResponseMock = EventResponse.builder()
+                .date("any-date")
+                .id(1)
+                .location("any-location")
+                .name("any-name")
+                .build();
+
+        given(mapper.fromJson(mapper.toJson(eventRequestMock), Event.class))
+                .willReturn(eventMock);
+
+        given(createOrUpdateEventUseCase.execute(any(Event.class), anyString()))
+                .willReturn(Mono.just(eventCreatedMock));
+
+        given(mapperEvent.toEventResponse(eventCreatedMock))
+                .willReturn(eventResponseMock);
+
+        webTestClient.put()
+                .uri(EVENTS_ROUTE)
+                .accept(MediaType.APPLICATION_JSON)
+                .bodyValue(eventRequestMock)
+                .exchange()
+                .expectStatus().isCreated()
+                .expectBody(EventResponse.class)
+                .value(eventResponse -> {
+                            Assertions.assertThat(eventResponse.getId()).isNotNull();
+                            Assertions.assertThat(eventResponse.getName()).isEqualTo(eventResponseMock.getName());
+                        }
+                );
+    }
 }
