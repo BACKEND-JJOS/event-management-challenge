@@ -56,6 +56,7 @@ public class Handler {
         String traceUUID = UUID.randomUUID().toString();
         log.info(MESSAGE_LOG_TRACE, serverRequest.uri(), traceUUID);
         return getEventByIdUseCase.get(Integer.valueOf(serverRequest.pathVariable("id")), traceUUID)
+                .map(mapperEvent::toEventResponse)
                 .flatMap(event -> ServerResponse.ok().bodyValue(event))
                 .switchIfEmpty(ServerResponse.status(HttpStatus.NOT_FOUND).bodyValue(new StatusEventResponse("The event not exist")));
     }

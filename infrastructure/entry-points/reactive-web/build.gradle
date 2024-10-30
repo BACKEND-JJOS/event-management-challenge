@@ -4,6 +4,8 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.11.0'
     implementation 'com.fatboyindustrial.gson-javatime-serialisers:gson-javatime-serialisers:1.1.2'
 
+    testImplementation 'org.springframework.security:spring-security-test'
+
     implementation project(':model')
     implementation project(':usecase')
 }
