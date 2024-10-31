@@ -22,10 +22,9 @@ public class EventInputValidator {
      * @param date La fecha del evento en formato de cadena.
      * @return Un Mono vacío si el formato es válido, o un error si el formato es inválido.
      */
-    public static Mono<Void> validateDateFormat(String date) {
+    public static Mono<String> validateDateFormat(String date) {
         return Mono.just(date)
-                .map(d -> LocalDateTime.parse(d, DATE_FORMAT))
-                .then()
+                .map(d -> LocalDateTime.parse(d, DATE_FORMAT).toString())
                 .onErrorMap(DateTimeParseException.class, e ->
                         new BusinessException(BusinessEventErrorCode.INVALID_DATE_FORMAT));
     }

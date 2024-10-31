@@ -18,12 +18,12 @@ public class EventBusinessValidator {
      * @param date La fecha del evento en formato de cadena.
      * @return Un Mono vacío si la fecha es válida, o un error si la fecha está en el pasado.
      */
-    public static Mono<Void> validateDateInFuture(String date) {
+    public static Mono<String> validateDateInFuture(String date) {
         return Mono.just(date)
                 .map(LocalDateTime::parse)
                 .flatMap(eventDate -> eventDate.isBefore(LocalDateTime.now().plusMinutes(30))
                         ? Mono.error(new BusinessException(BusinessEventErrorCode.EVENT_DATE_IN_PAST))
-                        : Mono.empty()
+                        : Mono.just(date)
                 );
     }
 }
