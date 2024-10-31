@@ -5,5 +5,5 @@ import org.springframework.data.r2dbc.repository.R2dbcRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface EventUserRepository extends R2dbcRepository<EventAssistantEntity, Integer> {
+public interface EventAssistantRepository extends R2dbcRepository<EventAssistantEntity, Integer> {
 }

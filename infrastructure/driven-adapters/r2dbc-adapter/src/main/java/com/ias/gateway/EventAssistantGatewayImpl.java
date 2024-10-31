@@ -1,6 +1,6 @@
-package com.ias.gatweway;
+package com.ias.gateway;
 
-import com.ias.EventUserReactiveAdapter;
+import com.ias.EventAssistantReactiveAdapter;
 import com.ias.event.gateway.EventAssistantRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -10,7 +10,7 @@ import reactor.core.publisher.Mono;
 @AllArgsConstructor
 public class EventAssistantGatewayImpl implements EventAssistantRepository {
 
-    private final EventUserReactiveAdapter eventUserAdapter;
+    private final EventAssistantReactiveAdapter eventUserAdapter;
 
     @Override
     public Mono<Void> save(Integer eventId, Integer assistantId) {

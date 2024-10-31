@@ -8,6 +8,6 @@ import reactor.core.publisher.Flux;
 
 @Repository
 public interface EventReactiveRepository extends R2dbcRepository<EventEntity, Integer> {
-    @Query("SELECT e.* FROM event e JOIN event_user eu ON e.id = eu.event_id WHERE eu.user_id = :userId")
+    @Query("SELECT e.* FROM event e JOIN event_assistant eu ON e.id = eu.event_id WHERE eu.assistant_id = :userId")
     Flux<EventEntity> findAllByUserId(Integer userId);
 }

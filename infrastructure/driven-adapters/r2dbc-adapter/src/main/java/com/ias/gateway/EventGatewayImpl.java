@@ -1,4 +1,4 @@
-package com.ias.gatweway;
+package com.ias.gateway;
 
 import com.ias.EventReactiveAdapter;
 import com.ias.entity.EventEntity;

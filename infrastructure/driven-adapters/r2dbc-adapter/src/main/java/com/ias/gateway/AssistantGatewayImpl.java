@@ -1,4 +1,4 @@
-package com.ias.gatweway;
+package com.ias.gateway;
 
 import com.google.gson.Gson;
 import com.ias.AssistantReactiveAdapter;
