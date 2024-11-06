@@ -33,7 +33,7 @@ public class RegisterAssistantToEventUseCase {
                                                 .flatMap(userRegisteredInEvent -> Boolean.TRUE.equals(userRegisteredInEvent) ?
                                                         Mono.error(new BusinessException(BusinessEventErrorCode.USER_ASSISTANT_ALREADY_REGISTERED)) :
                                                         eventAssistantRepository.save(event.getId(), existingUser.getId())
-                                                                .then(eventGateway.publishUserRegisterToEvent(event.getId(), existingUser.getId(), traceUUID))
+                                                                .then(eventGateway.publishUserRegisterToEvent(existingUser.getId(), event.getId(), traceUUID))
                                                 )
                                 )
 
