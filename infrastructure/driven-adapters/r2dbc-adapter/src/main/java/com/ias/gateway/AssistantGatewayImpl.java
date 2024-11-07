@@ -7,6 +7,7 @@ import com.ias.user.Assistant;
 import com.ias.user.gateway.AssistantRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Component
@@ -28,4 +29,9 @@ public class AssistantGatewayImpl implements AssistantRepository {
                 .map(assistantEntity -> mapper.fromJson(mapper.toJson(assistantEntity), Assistant.class));
     }
 
+    @Override
+    public Flux<Assistant> getAllAssistantByEventId(Integer eventId) {
+        return assistantReactiveAdapter.getAllAssistanByEventId(eventId)
+                .map(assistantEntity -> mapper.fromJson(mapper.toJson(assistantEntity), Assistant.class));
+    }
 }

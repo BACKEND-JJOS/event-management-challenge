@@ -2,6 +2,7 @@ package com.ias.gateway;
 
 import com.ias.EventAssistantReactiveAdapter;
 import com.ias.event.gateway.EventAssistantRepository;
+import com.ias.user.Assistant;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
